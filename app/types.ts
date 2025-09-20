@@ -4,17 +4,17 @@ export interface Product {
   price: number;
   description: string;
   image: string;
-  promo?: string;
+  discount?: string;
 }
 
-export interface Promo {
+export interface Discount {
   id: string;
-  type: PromoType;
+  type: DiscountType;
   discount?: number;
   label?: string;
 }
 
-type PromoType = 'fixed' | 'percentage' | 'one-free';
+type DiscountType = 'fixed' | 'percentage' | 'one-free';
 
 export interface CartItem {
   product: Product;

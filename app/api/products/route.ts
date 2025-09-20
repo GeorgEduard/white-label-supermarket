@@ -20,7 +20,7 @@ const products: Product[] = [
     name: 'Asparagus',
     description: 'Is it one? Is it a bundle? Buy and find out',
     price: 0.83,
-    promo: 'P1',
+    discount: 'P1',
     image: '/products-asparagus.svg',
   },
 ];

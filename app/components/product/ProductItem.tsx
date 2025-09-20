@@ -1,9 +1,9 @@
 'use client';
 import Image from 'next/image';
 import type { CartItem } from '@/app/types';
-import PromotionLabel from '@/app/components/PromotionLabel';
+import DiscountLabel from '@/app/components/DiscountLabel';
 import CartDetails from '@/app/components/product/CartDetails';
-import { addToCart, getCartPrice, getPayableUnits } from '@/app/lib/cart';
+import { addToCart, getCartPrice } from '@/app/lib/cart';
 import { useState } from 'react';
 
 interface ProductItemProps extends CartItem {
@@ -35,7 +35,7 @@ export default function ProductItem({
           sizes="128px"
           className="object-contain"
         />
-        <PromotionLabel promoID={p.promo} />
+        <DiscountLabel discountID={p.discount} />
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between gap-4">

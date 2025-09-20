@@ -1,6 +1,6 @@
-import { Promo } from '@/app/types';
+import { Discount } from '@/app/types';
 
-export const promotions: Promo[] = [
+export const discounts: Discount[] = [
   {
     id: 'P1',
     type: 'one-free',

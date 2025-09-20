@@ -1,5 +1,5 @@
 import type { CartItem, Product } from '@/app/types';
-import { promotions } from '@/app/api/promotions/promotions';
+import { discounts } from '@/app/api/discounts/discounts';
 
 const KEY = 'cart';
 
@@ -43,11 +43,11 @@ export function setCart(items: CartItem[]) {
 }
 
 export function isOneFree(product?: Product) {
-  if (!product?.promo) {
+  if (!product?.discount) {
     return false;
   }
-  const promo = promotions.find(p => p.id === product.promo);
-  return promo?.type === 'one-free';
+  const discount = discounts.find(p => p.id === product.discount);
+  return discount?.type === 'one-free';
 }
 
 export function getPayableUnits(product: Product, qty: number) {

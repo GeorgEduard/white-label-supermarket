@@ -4,9 +4,12 @@ import type { CartItem } from '@/app/types';
 import ProductItem from '@/app/components/product/ProductItem';
 import CheckoutForm from '@/app/components/checkout/CheckoutForm';
 import { clearCart, getCart, getCartPrice } from '@/app/lib/cart';
+import useCartDiscounts from '@/app/hooks/useCartDiscounts';
+import DiscountItem from '@/app/components/discounts/DiscountItem';
 
 export default function CheckoutPage() {
   const [items, setItems] = useState<CartItem[]>([]);
+  const { discounts, error, loading } = useCartDiscounts();
 
   useEffect(() => {
     const load = () => setItems(getCart());
@@ -37,11 +40,23 @@ export default function CheckoutPage() {
     [items],
   );
 
-  const discount = useMemo(() => {
-    return subtotal > 10 ? subtotal * 0.2 : 0;
-  }, [subtotal]);
+  const totalDiscount = useMemo(() => {
+    if (!discounts || !discounts.length) {
+      return 0;
+    }
+    return discounts.reduce((sum, d) => {
+      if (subtotal >= d.threshold) {
+        const value = d.type === 'fixed' ? d.value : (subtotal * d.value) / 100;
+        return sum + value;
+      }
+      return sum;
+    }, 0);
+  }, [discounts, subtotal]);
 
-  const total = useMemo(() => subtotal - discount, [subtotal, discount]);
+  const total = useMemo(
+    () => subtotal - totalDiscount,
+    [subtotal, totalDiscount],
+  );
 
   return (
     <div className="mx-auto max-w-4xl p-4 sm:p-6">
@@ -84,15 +99,29 @@ export default function CheckoutPage() {
               <span>Subtotal</span>
               <span>£{subtotal.toFixed(2)}</span>
             </div>
-            <div className="flex justify-between text-sm mb-2">
-              <div>
-                <p>Discount</p>
-                <p>(20% off for orders over £10)</p>
-              </div>
+            {error ? (
               <span className="text-red-600 whitespace-nowrap">
-                -{`£${discount.toFixed(2)}`}
+                Failed to fetch discounts
               </span>
-            </div>
+            ) : loading ? (
+              <div
+                className="flex items-center gap-2 text-sm text-black/70"
+                role="status"
+                aria-live="polite"
+                aria-busy="true"
+              >
+                <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-emerald-600 border-t-transparent" />
+                <span className="sr-only">Loading discounts…</span>
+              </div>
+            ) : discounts.length ? (
+              discounts.map(discount => (
+                <DiscountItem
+                  key={discount.id}
+                  discount={discount}
+                  subtotal={subtotal}
+                />
+              ))
+            ) : null}
             <div className="flex justify-between text-sm mb-4">
               <span>Delivery</span>
               <span>Free</span>

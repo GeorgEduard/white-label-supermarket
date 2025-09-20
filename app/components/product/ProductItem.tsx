@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import type { CartItem } from '@/app/types';
-import DiscountLabel from '@/app/components/DiscountLabel';
+import DiscountLabel from '@/app/components/discounts/DiscountLabel';
 import CartDetails from '@/app/components/product/CartDetails';
 import { addToCart, getCartPrice } from '@/app/lib/cart';
 import { useState } from 'react';

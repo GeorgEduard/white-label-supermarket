@@ -7,17 +7,16 @@ export interface Product {
   discount?: string;
 }
 
-interface BaseDiscount {
+interface ProductDiscount {
   id: string;
   type: DiscountType;
   scope: DiscountScope;
-  discount?: number;
+  label: string;
+  value?: number;
 }
 
-interface ProductDiscount extends BaseDiscount {
-  label: string;
-}
-interface CartDiscount extends BaseDiscount {
+export interface CartDiscount extends Omit<ProductDiscount, 'value'> {
+  value: number;
   threshold: number;
   isActive: boolean;
 }

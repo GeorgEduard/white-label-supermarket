@@ -7,6 +7,7 @@ const products: Product[] = [
     description: 'A delicious cake',
     price: 2.0,
     image: '/products-cake.svg',
+    stock: 100,
   },
   {
     code: 'A21',
@@ -14,6 +15,7 @@ const products: Product[] = [
     description: 'Litter for your kitty',
     price: 18.99,
     image: '/products-kitty-litter.svg',
+    stock: 100,
   },
   {
     code: 'G95',
@@ -22,6 +24,7 @@ const products: Product[] = [
     price: 0.83,
     discount: 'P1',
     image: '/products-asparagus.svg',
+    stock: 5,
   },
 ];
 

@@ -17,7 +17,10 @@ export function getCart(): CartItem[] {
         const qty = i?.qty ?? 1;
         const product = i?.product as Product;
         if (!product) return i;
-        const adjustedQty = adjustQtyForDiscount(product, qty);
+        const adjustedQty = clampToStock(
+          product,
+          adjustQtyForDiscount(product, qty),
+        );
         return { ...i, qty: adjustedQty };
       });
     }
@@ -53,12 +56,12 @@ export function isOneFree(product?: Product) {
 }
 
 export function getPayableUnits(product: Product, qty: number) {
-  const adjustedQty = adjustQtyForDiscount(product, qty);
+  const normalizedQty = Math.max(0, Math.floor(qty || 0));
   if (isOneFree(product)) {
-    // Every second item is free; payable units are qty / 2
-    return Math.floor(adjustedQty / 2);
+    // Every second item is free; payable units are ceil(qty / 2)
+    return Math.ceil(normalizedQty / 2);
   }
-  return adjustedQty;
+  return normalizedQty;
 }
 
 export function getCartPrice(product: Product, qty: number) {
@@ -70,14 +73,38 @@ function adjustQtyForDiscount(product: Product, qty: number) {
   if (!isOneFree(product)) {
     return baseQty;
   }
-  // For one-free, the minimum is 2 and the quantity should be even
+  // For one-free, enforce minimum quantity but do not force even quantities
   const atLeastMin = Math.max(2, baseQty);
-  return atLeastMin % 2 === 0 ? atLeastMin : atLeastMin + 1;
+  return atLeastMin;
+}
+
+function clampToStock(product: Product, qty: number) {
+  const stock = product.stock ?? 0;
+  if (stock <= 0) {
+    return 0;
+  }
+  const requested = Math.max(0, Math.floor(qty || 0));
+  if (!isOneFree(product)) {
+    return Math.min(requested, stock);
+  }
+  // One-free: allow odd ONLY at stock cap; otherwise enforce even quantities with min
+  const min = stock < 2 ? 1 : 2;
+  if (requested >= stock) {
+    return stock;
+  }
+  const desired = Math.max(min, requested);
+  const evenDesired = desired % 2 === 0 ? desired : desired - 1;
+  return Math.min(evenDesired, stock);
 }
 
 export function addToCart(product: Product, qty = 1) {
   const items = getCart();
   const index = items.findIndex(i => i.product.code === product.code);
+
+  // Prevent adding when there's no stock
+  if ((product.stock ?? 0) <= 0) {
+    return items;
+  }
 
   // For one-free, adding a single should add 2; generally enforce even increments and min 2
   const increment = adjustQtyForDiscount(product, qty);
@@ -85,10 +112,16 @@ export function addToCart(product: Product, qty = 1) {
   if (index >= 0) {
     const current = items[index];
     const nextQtyRaw = (current.qty || 0) + increment;
-    const nextQty = adjustQtyForDiscount(product, nextQtyRaw);
+    const nextQty = clampToStock(
+      product,
+      adjustQtyForDiscount(product, nextQtyRaw),
+    );
     items[index] = { ...current, qty: nextQty };
   } else {
-    items.push({ product, qty: increment });
+    const initial = clampToStock(product, increment);
+    if (initial > 0) {
+      items.push({ product, qty: initial });
+    }
   }
   setCart(items);
   return items;
@@ -98,7 +131,10 @@ export function updateQty(code: string, qty: number) {
   const items = getCart();
   const updated = items.map(i => {
     if (i.product.code !== code) return i;
-    const adjusted = adjustQtyForDiscount(i.product, qty);
+    const adjusted = clampToStock(
+      i.product,
+      adjustQtyForDiscount(i.product, qty),
+    );
     return { ...i, qty: adjusted };
   });
   setCart(updated);

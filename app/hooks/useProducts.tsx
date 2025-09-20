@@ -26,7 +26,7 @@ export default function useProducts() {
   }, []);
 
   useEffect(() => {
-    fetchProducts();
+    void fetchProducts();
   }, [fetchProducts]);
 
   return { products, loading, error };

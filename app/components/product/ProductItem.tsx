@@ -1,12 +1,23 @@
 import Image from 'next/image';
 import type { Product } from '@/app/types';
 import PromotionLabel from '@/app/components/PromotionLabel';
+import CartItem from '@/app/components/product/CartItem';
 
 interface ProductItemProps {
   product: Product;
+  isInCart?: boolean;
+  qty?: number;
+  updateQty?: (code: string, qty: number) => void;
+  removeItem?: (code: string) => void;
 }
 
-export default function ProductItem({ product: p }: ProductItemProps) {
+export default function ProductItem({
+  product: p,
+  isInCart,
+  qty,
+  updateQty,
+  removeItem,
+}: ProductItemProps) {
   return (
     <li className="flex gap-4 sm:gap-6 items-center p-4 rounded-lg border border-emerald-100 bg-white/80 shadow-sm hover:shadow-md transition-shadow duration-200">
       <div className="relative w-28 h-28 sm:w-32 sm:h-32 shrink-0 overflow-hidden rounded-md ring-1 ring-emerald-100 bg-white shadow-inner">
@@ -29,11 +40,20 @@ export default function ProductItem({ product: p }: ProductItemProps) {
         <p className="text-sm text-black/70 mt-1 line-clamp-2">
           {p.description}
         </p>
-        <div className="mt-3">
-          <button className="inline-flex items-center justify-center rounded-md bg-amber-500 text-white px-3 py-1.5 text-sm shadow-sm hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-400/60 transition-colors duration-200">
-            Add to cart
-          </button>
-        </div>
+        {isInCart ? (
+          <CartItem
+            product={p}
+            removeItem={removeItem}
+            qty={qty}
+            updateQty={updateQty}
+          />
+        ) : (
+          <div className="mt-3">
+            <button className="inline-flex items-center justify-center rounded-md bg-amber-500 text-white px-3 py-1.5 text-sm shadow-sm hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-400/60 transition-colors duration-200">
+              Add to cart
+            </button>
+          </div>
+        )}
       </div>
     </li>
   );

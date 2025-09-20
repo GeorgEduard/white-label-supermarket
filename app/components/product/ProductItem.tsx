@@ -49,7 +49,7 @@ export default function ProductItem({
           />
         ) : (
           <div className="mt-3">
-            <button className="inline-flex items-center justify-center rounded-md bg-amber-500 text-white px-3 py-1.5 text-sm shadow-sm hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-400/60 transition-colors duration-200">
+            <button className="inline-flex items-center justify-center rounded-md bg-cyan-700 text-white px-3 py-1.5 text-sm shadow-sm hover:bg-cyan-800 focus:outline-none focus:ring-2 focus:ring-cyan-500/60 transition-colors duration-200">
               Add to cart
             </button>
           </div>

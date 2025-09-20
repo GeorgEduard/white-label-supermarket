@@ -150,7 +150,7 @@ export default function CheckoutForm({ items, total }: CheckoutFormProps) {
           <button
             type="submit"
             disabled={items.length === 0 || isSubmitting}
-            className="w-full inline-flex items-center justify-center rounded-md bg-amber-500 text-white px-4 py-2 text-sm shadow-sm hover:bg-amber-600 disabled:opacity-60 disabled:cursor-not-allowed"
+            className="w-full inline-flex items-center justify-center rounded-md bg-cyan-700 text-white px-4 py-2 text-sm shadow-sm hover:bg-cyan-800 disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {isSubmitting ? 'Submitting...' : 'Submit order'}
           </button>

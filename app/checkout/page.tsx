@@ -1,52 +1,41 @@
 'use client';
-import { useMemo, useState } from 'react';
-import type { Product } from '@/app/types';
+import { useEffect, useMemo, useState } from 'react';
+import type { CartItem } from '@/app/types';
 import ProductItem from '@/app/components/product/ProductItem';
 import CheckoutForm from '@/app/components/checkout/CheckoutForm';
-
-interface CartItem {
-  product: Product;
-  qty: number;
-}
+import { getCart } from '@/app/lib/cart';
 
 export default function CheckoutPage() {
-  // Dummy product (we'll replace with real cart later)
-  const dummyProduct: Product = useMemo(
-    () => ({
-      code: 'APL001',
-      name: 'Fresh Apples (1kg)',
-      price: 3.99,
-      description: 'Crisp, juicy apples perfect for snacking and baking.',
-      image: '/products-cake.svg',
-      promo: undefined,
-    }),
-    [],
-  );
+  const [items, setItems] = useState<CartItem[]>([]);
 
-  const [items, setItems] = useState<CartItem[]>([
-    { product: dummyProduct, qty: 1 },
-  ]);
+  useEffect(() => {
+    const load = () => setItems(getCart());
+    // Load cart from sessionStorage on mount
+    load();
 
+    const handler = (e: Event) => {
+      try {
+        const cartEvent = e as CustomEvent<{ items?: CartItem[] }>;
+        const items = cartEvent.detail?.items;
+        if (Array.isArray(items)) {
+          setItems(items as CartItem[]);
+        } else {
+          load();
+        }
+      } catch {
+        load();
+      }
+    };
 
+    window.addEventListener('cart:updated', handler as EventListener);
+    return () =>
+      window.removeEventListener('cart:updated', handler as EventListener);
+  }, []);
 
   const cartTotal = useMemo(
     () => items.reduce((sum, it) => sum + it.product.price * it.qty, 0),
     [items],
   );
-
-  function updateQty(code: string, qty: number) {
-    setItems(prev =>
-      prev
-        .map(ci =>
-          ci.product.code === code ? { ...ci, qty: Math.max(1, qty) } : ci,
-        )
-        .filter(ci => ci.qty > 0),
-    );
-  }
-
-  function removeItem(code: string) {
-    setItems(prev => prev.filter(ci => ci.product.code !== code));
-  }
 
   return (
     <div className="mx-auto max-w-4xl p-4 sm:p-6">
@@ -67,8 +56,6 @@ export default function CheckoutPage() {
                   key={product.code}
                   product={product}
                   qty={qty}
-                  updateQty={updateQty}
-                  removeItem={removeItem}
                 />
               ))}
             </ul>

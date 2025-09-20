@@ -9,7 +9,7 @@ export default function Home() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Featured Products</h1>
+      <h1 className="text-2xl font-semibold">Our Products</h1>
       {loading ? (
         <div className="text-sm text-black/60">Loading products…</div>
       ) : error ? (

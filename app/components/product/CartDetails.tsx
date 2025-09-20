@@ -1,19 +1,14 @@
+'use client';
 import React from 'react';
 import { Product } from '@/app/types';
+import { removeFromCart, updateQty } from '@/app/lib/cart';
 
 interface CartItemProps {
   product: Product;
   qty: number;
-  updateQty: (code: string, qty: number) => void;
-  removeItem: (code: string) => void;
 }
 
-export default function CartItem({
-  product,
-  qty,
-  updateQty,
-  removeItem,
-}: CartItemProps) {
+export default function CartDetails({ product, qty }: CartItemProps) {
   return (
     <div className="mt-3 flex items-center gap-3">
       {/* Quantity */}
@@ -33,7 +28,7 @@ export default function CartItem({
       <button
         aria-label="Remove from cart"
         className="ml-auto inline-flex items-center justify-center rounded-md border border-transparent px-2.5 py-1.5 text-sm text-red-600 hover:bg-red-50"
-        onClick={() => removeItem(product.code)}
+        onClick={() => removeFromCart(product.code)}
       >
         <span aria-hidden>×</span>
       </button>

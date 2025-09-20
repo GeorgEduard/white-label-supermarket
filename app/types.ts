@@ -15,3 +15,8 @@ export interface Promo {
 }
 
 type PromoType = 'fixed' | 'percentage' | 'one-free';
+
+export interface CartItem {
+  product: Product;
+  qty: number;
+}

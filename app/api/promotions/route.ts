@@ -4,6 +4,7 @@ const promotions: Promo[] = [
   {
     id: 'P1',
     type: 'one-free',
+    label: 'Buy one get one free',
   },
 ];
 

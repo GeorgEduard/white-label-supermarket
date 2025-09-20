@@ -11,6 +11,7 @@ export interface Promo {
   id: string;
   type: PromoType;
   discount?: number;
+  label?: string;
 }
 
 type PromoType = 'fixed' | 'percentage' | 'one-free';

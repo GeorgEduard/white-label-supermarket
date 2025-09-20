@@ -29,7 +29,7 @@ describe('CartCountBadge', () => {
       { product: productB, qty: 2 },
     ]);
 
-    const { rerender } = render(<CartCountBadge />);
+    const { rerender } = render(React.createElement(CartCountBadge));
 
     expect(
       screen.getByLabelText(/3 items? in cart/i),
@@ -39,7 +39,7 @@ describe('CartCountBadge', () => {
     clearCart();
 
     // Rerender to reflect state changes in hook
-    rerender(<CartCountBadge />);
+    rerender(React.createElement(CartCountBadge));
 
     expect(screen.queryByLabelText(/items? in cart/i)).toBeNull();
   });

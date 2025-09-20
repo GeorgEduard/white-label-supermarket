@@ -26,21 +26,25 @@ const fixedDiscount: CartDiscount = {
 describe('DiscountItem', () => {
   it('does not render when subtotal is below threshold', () => {
     const { container } = render(
-      <DiscountItem discount={percentageDiscount} subtotal={5} />,
+      React.createElement(DiscountItem, { discount: percentageDiscount, subtotal: 5 }),
     );
     // returns null
     expect(container).toBeEmptyDOMElement();
   });
 
   it('renders percentage discount value when applicable', () => {
-    render(<DiscountItem discount={percentageDiscount} subtotal={20} />);
+    render(
+      React.createElement(DiscountItem, { discount: percentageDiscount, subtotal: 20 }),
+    );
     expect(screen.getByText(/20% off/i)).toBeInTheDocument();
     // 20% of 20 => £4.00
     expect(screen.getByText('-£4.00')).toBeInTheDocument();
   });
 
   it('renders fixed discount value when applicable', () => {
-    render(<DiscountItem discount={fixedDiscount} subtotal={25} />);
+    render(
+      React.createElement(DiscountItem, { discount: fixedDiscount, subtotal: 25 }),
+    );
     expect(screen.getByText(/Save £5/i)).toBeInTheDocument();
     expect(screen.getByText('-£5.00')).toBeInTheDocument();
   });

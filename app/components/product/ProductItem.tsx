@@ -3,7 +3,7 @@ import Image from 'next/image';
 import type { CartItem } from '@/app/types';
 import PromotionLabel from '@/app/components/PromotionLabel';
 import CartDetails from '@/app/components/product/CartDetails';
-import { addToCart } from '@/app/lib/cart';
+import { addToCart, getCartPrice, getPayableUnits } from '@/app/lib/cart';
 import { useState } from 'react';
 
 interface ProductItemProps extends CartItem {
@@ -23,7 +23,7 @@ export default function ProductItem({
     setLoading(false);
   };
 
-  const itemPrice = isInCart ? p.price * qty : p.price;
+  const itemPrice = isInCart ? getCartPrice(p, qty) : p.price;
 
   return (
     <li className="flex gap-4 sm:gap-6 items-center p-4 rounded-lg border border-emerald-100 bg-white/80 shadow-sm hover:shadow-md transition-shadow duration-200">
@@ -41,7 +41,7 @@ export default function ProductItem({
         <div className="flex items-start justify-between gap-4">
           <h2 className="text-lg font-medium truncate">{p.name}</h2>
           <div className="text-emerald-700 font-semibold">
-            ${itemPrice.toFixed(2)}
+            £{itemPrice.toFixed(2)}
           </div>
         </div>
         <p className="text-sm text-black/70 mt-1 line-clamp-2">

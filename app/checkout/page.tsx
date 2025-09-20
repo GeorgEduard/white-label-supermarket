@@ -1,9 +1,9 @@
 'use client';
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import type { CartItem } from '@/app/types';
 import ProductItem from '@/app/components/product/ProductItem';
 import CheckoutForm from '@/app/components/checkout/CheckoutForm';
-import { getCart } from '@/app/lib/cart';
+import { clearCart, getCart, getCartPrice } from '@/app/lib/cart';
 
 export default function CheckoutPage() {
   const [items, setItems] = useState<CartItem[]>([]);
@@ -32,10 +32,16 @@ export default function CheckoutPage() {
       window.removeEventListener('cart:updated', handler as EventListener);
   }, []);
 
-  const cartTotal = useMemo(
-    () => items.reduce((sum, it) => sum + it.product.price * it.qty, 0),
+  const subtotal = useMemo(
+    () => items.reduce((sum, it) => sum + getCartPrice(it.product, it.qty), 0),
     [items],
   );
+
+  const discount = useMemo(() => {
+    return subtotal > 10 ? subtotal * 0.2 : 0;
+  }, [subtotal]);
+
+  const total = useMemo(() => subtotal - discount, [subtotal, discount]);
 
   return (
     <div className="mx-auto max-w-4xl p-4 sm:p-6">
@@ -44,7 +50,16 @@ export default function CheckoutPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Cart */}
         <section className="lg:col-span-2">
-          <h2 className="text-xl font-medium mb-3">Your Cart</h2>
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-xl font-medium mb-3">Your Cart</h2>
+            <button
+              aria-label="Remove from cart"
+              className="ml-auto inline-flex items-center justify-center rounded-md border border-transparent px-2.5 py-1.5 text-sm text-red-600 hover:bg-red-50 cursor-pointer"
+              onClick={clearCart}
+            >
+              Clear cart
+            </button>
+          </div>
 
           {items.length === 0 ? (
             <p className="text-black/70">Your cart is empty.</p>
@@ -67,7 +82,16 @@ export default function CheckoutPage() {
             <h2 className="text-lg font-medium mb-3">Order Summary</h2>
             <div className="flex justify-between text-sm mb-2">
               <span>Subtotal</span>
-              <span>${cartTotal.toFixed(2)}</span>
+              <span>£{subtotal.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between text-sm mb-2">
+              <div>
+                <p>Discount</p>
+                <p>(20% off for orders over £10)</p>
+              </div>
+              <span className="text-red-600 whitespace-nowrap">
+                -{`£${discount.toFixed(2)}`}
+              </span>
             </div>
             <div className="flex justify-between text-sm mb-4">
               <span>Delivery</span>
@@ -75,10 +99,10 @@ export default function CheckoutPage() {
             </div>
             <div className="flex justify-between font-semibold text-emerald-700 mb-4">
               <span>Total</span>
-              <span>${cartTotal.toFixed(2)}</span>
+              <span>£{total.toFixed(2)}</span>
             </div>
 
-            <CheckoutForm items={items} total={cartTotal} />
+            <CheckoutForm items={items} total={total} />
           </div>
         </section>
       </div>

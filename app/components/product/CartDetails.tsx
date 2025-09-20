@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { Product } from '@/app/types';
-import { removeFromCart, updateQty } from '@/app/lib/cart';
+import { isOneFree, removeFromCart, updateQty } from '@/app/lib/cart';
 
 interface CartItemProps {
   product: Product;
@@ -18,7 +18,8 @@ export default function CartDetails({ product, qty }: CartItemProps) {
       <input
         id={`qty-${product.code}`}
         type="number"
-        min={1}
+        min={isOneFree(product) ? 2 : 1}
+        step={isOneFree(product) ? 2 : 1}
         inputMode="numeric"
         className="w-20 rounded-md border border-slate-200 px-2 py-1 text-sm"
         value={qty}

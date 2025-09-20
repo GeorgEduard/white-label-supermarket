@@ -4,14 +4,14 @@ import '@testing-library/jest-dom';
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
   // Use plain JS here so Jest doesn't need to transpile TS in setup files
-  value: query => ({
+  value: (query: string): MediaQueryList => ({
     matches: false,
     media: query,
     onchange: null,
-    addListener: () => {},
-    removeListener: () => {},
+    addListener: (_listener: (this: MediaQueryList, ev: MediaQueryListEvent) => any) => {},
+    removeListener: (_listener: (this: MediaQueryList, ev: MediaQueryListEvent) => any) => {},
     addEventListener: () => {},
     removeEventListener: () => {},
     dispatchEvent: () => false,
-  }),
+  } as unknown as MediaQueryList),
 });

@@ -1,6 +1,6 @@
 AI generated README. My personal notes are under `Development reasoning and explanations` at the bottom.
 
-# White Label Supermarket
+# White Label Loyalty Supermarket
 
 A simple e‑commerce project built with Next.js (App Router). It showcases a product catalogue and a lightweight shopping cart, with a focus on composable UI and testability.
 
@@ -61,12 +61,36 @@ I decided to go with Next.js as a frontend framework because I believe it's the 
 
 Because there are only three products, I decided to go with a simple product list on the homepage. I didn't see a reason to build an individual product page, but it would be necessary if the project grew.
 
+For the cart system I went with the `sessionStorage` API. I chose this approach because it's simple, and enough for a basic shopping cart.`
+
 For the checkout, again, being a simple project, there was no need to implement a `user` logic, with sign-up, sign-in, etc. A simple cart, with a basic checkout form, was enough.
 
-For the `buy-one-get-one-free` I chose to automatically add a second product to the cart when the user adds the first one. One other option (and most likely the better) would have been to display the extra products in the cart as free. However, I decided this one was simpler.
+For the `buy-one-get-one-free` I chose to automatically add a second product to the cart when the user adds the first one. One other option (and most likely the better) would have been to display the extra products in the cart as free. However, I decided this one was less complex and easier to implement.
 
-Some UI features that could've been a nice addition were using a library for icons, and some toasts to display success/warning/error messages. I chose not to spend time on them. Also, the design is very basic and could be improved.
 
+### Future improvements
+
+- Improve the design, at least get a free e-commerce theme and implement it.
+- Use a library for icons.
+- Use toasts for various notifications.
+- Add a notification system.
+- Add a product rating system.
+- Add a product review system.
+- Add a product filter system.
+- Add a product sort system.
+- Add a product details page.
+- Add product categories.
+- Add a product search system.
+- Add a more extensive error handling logic.
+- Add a user login/signup system.
+- Add a user account page.
+- Use a real database.
+- Use a proper backend framework.
+- Update the cart system to use a database to store the cart items for the user.
+- Add a user orders history.
+- Add a user payment system.
+- Add a user wishlist.
+- Add a payment gateway.
 
 ### Dev tools AI usage
 

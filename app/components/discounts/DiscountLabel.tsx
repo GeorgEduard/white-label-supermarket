@@ -5,7 +5,7 @@ export default function DiscountLabel({ discountID }: { discountID?: string }) {
   const { discount, loading, error } = useDiscount(discountID);
 
   return discount && !loading && !error ? (
-    <span className="absolute top-2 left-2 text-[10px] uppercase bg-red-500 text-white px-2 py-1 rounded shadow-sm max-w-4/6">
+    <span className="absolute top-3 -left-2 text-[10px] uppercase bg-red-500 text-white px-2 py-1 rounded shadow-sm max-w-4/6">
       {discount?.label}
     </span>
   ) : null;

@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
-import Menu from '@/app/components/Menu';
+import Menu from '@/app/components/shared/Menu';
 import { ProductProvider } from '@/app/context/ProductProvider';
 
 const geistSans = Geist({

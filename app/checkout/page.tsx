@@ -1,12 +1,10 @@
 'use client';
 import React, { useEffect, useMemo, useState } from 'react';
 import type { CartItem } from '@/app/types';
-import ProductItem from '@/app/components/product/ProductItem';
-import CheckoutForm from '@/app/components/checkout/CheckoutForm';
-import { clearCart, getCart, getCartPrice } from '@/app/lib/cart';
+import { getCart, getCartPrice } from '@/app/lib/cart';
 import useCartDiscounts from '@/app/hooks/useCartDiscounts';
-import DiscountItem from '@/app/components/discounts/DiscountItem';
-import Button from '@/app/components/ui/Button';
+import CartSection from '@/app/components/checkout/CartSection';
+import OrderSummary from '@/app/components/checkout/OrderSummary';
 
 export default function CheckoutPage() {
   const [items, setItems] = useState<CartItem[]>([]);
@@ -60,82 +58,20 @@ export default function CheckoutPage() {
   );
 
   return (
-    <div className="mx-auto max-w-4xl p-4 sm:p-6">
+    <div className="mx-auto max-w-5xl py-4 sm:py-6">
       <h1 className="text-2xl font-semibold mb-4">Checkout</h1>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Cart */}
-        <section className="lg:col-span-2">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-xl font-medium mb-3">Your Cart</h2>
-            <Button
-              aria-label="Remove from cart"
-              variant="danger"
-              size="sm"
-              onClick={clearCart}
-            >
-              Clear cart
-            </Button>
-          </div>
-
-          {items.length === 0 ? (
-            <p className="text-black/70">Your cart is empty.</p>
-          ) : (
-            <ul className="space-y-4">
-              {items.map(({ product, qty }) => (
-                <ProductItem
-                  isInCart
-                  key={product.code}
-                  product={product}
-                  qty={qty}
-                />
-              ))}
-            </ul>
-          )}
-        </section>
-        {/* Summary + Checkout */}
-        <section className="lg:col-span-1">
-          <div className="rounded-lg border border-emerald-100 bg-white p-4 shadow-sm">
-            <h2 className="text-lg font-medium mb-3">Order Summary</h2>
-            <div className="flex justify-between text-sm mb-2">
-              <span>Subtotal</span>
-              <span>£{subtotal.toFixed(2)}</span>
-            </div>
-            {error ? (
-              <span className="text-red-600 whitespace-nowrap">
-                Failed to fetch discounts
-              </span>
-            ) : loading ? (
-              <div
-                className="flex items-center gap-2 text-sm text-black/70"
-                role="status"
-                aria-live="polite"
-                aria-busy="true"
-              >
-                <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-emerald-600 border-t-transparent" />
-                <span className="sr-only">Loading discounts…</span>
-              </div>
-            ) : discounts.length ? (
-              discounts.map(discount => (
-                <DiscountItem
-                  key={discount.id}
-                  discount={discount}
-                  subtotal={subtotal}
-                />
-              ))
-            ) : null}
-            <div className="flex justify-between text-sm mb-4">
-              <span>Delivery</span>
-              <span>Free</span>
-            </div>
-            <div className="flex justify-between font-semibold text-emerald-700 mb-4">
-              <span>Total</span>
-              <span>£{total.toFixed(2)}</span>
-            </div>
-
-            <CheckoutForm items={items} total={total} />
-          </div>
-        </section>
+      <div className="rounded-lg bg-emerald-50/60 px-4 pb-8 pt-4 sm:px-6 sm:pb-12 sm:pt-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <CartSection items={items} />
+          <OrderSummary
+            items={items}
+            subtotal={subtotal}
+            total={total}
+            discounts={discounts}
+            loading={loading}
+            error={error}
+          />
+        </div>
       </div>
     </div>
   );

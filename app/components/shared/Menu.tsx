@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import Logo from '@/app/components/Logo';
+import Logo from '@/app/components/shared/Logo';
 import CartCountBadge from '@/app/components/CartCountBadge';
 export default function Menu() {
   return (

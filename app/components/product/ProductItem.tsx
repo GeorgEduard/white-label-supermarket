@@ -6,6 +6,7 @@ import CartDetails from '@/app/components/product/CartDetails';
 import { addToCart, getCartPrice } from '@/app/lib/cart';
 import { useState } from 'react';
 import Button from '@/app/components/ui/Button';
+import ProductCountBadge from '@/app/components/product/ProductCountBadge';
 
 interface ProductItemProps extends CartItem {
   isInCart?: boolean;
@@ -37,6 +38,7 @@ export default function ProductItem({
           className="object-contain"
         />
         <DiscountLabel discountID={p.discount} />
+        {!isInCart && <ProductCountBadge code={p.code} />}
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between gap-4">

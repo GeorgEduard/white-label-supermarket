@@ -1,17 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import Logo from '@/app/components/Logo';
 export default function Menu() {
   return (
     <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
       <Link href="/" className="flex items-center gap-3">
-        <Image
-          src="/logo.svg"
-          alt="Supermarket logo"
-          width={120}
-          height={32}
-          priority
-        />
+        <Logo />
       </Link>
       <Link
         href="/checkout"

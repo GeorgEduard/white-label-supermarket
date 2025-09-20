@@ -4,7 +4,9 @@ import { discounts } from '@/app/api/discounts/discounts';
 const KEY = 'cart';
 
 export function getCart(): CartItem[] {
-  if (typeof window === 'undefined') return [];
+  if (typeof window === 'undefined') {
+    return [];
+  }
   try {
     const data = sessionStorage.getItem(KEY);
     if (!data) return [];
@@ -15,7 +17,7 @@ export function getCart(): CartItem[] {
         const qty = i?.qty ?? 1;
         const product = i?.product as Product;
         if (!product) return i;
-        const adjustedQty = adjustQtyForPromo(product, qty);
+        const adjustedQty = adjustQtyForDiscount(product, qty);
         return { ...i, qty: adjustedQty };
       });
     }
@@ -51,7 +53,7 @@ export function isOneFree(product?: Product) {
 }
 
 export function getPayableUnits(product: Product, qty: number) {
-  const adjustedQty = adjustQtyForPromo(product, qty);
+  const adjustedQty = adjustQtyForDiscount(product, qty);
   if (isOneFree(product)) {
     // Every second item is free; payable units are qty / 2
     return Math.floor(adjustedQty / 2);
@@ -63,7 +65,7 @@ export function getCartPrice(product: Product, qty: number) {
   return product.price * getPayableUnits(product, qty);
 }
 
-function adjustQtyForPromo(product: Product, qty: number) {
+function adjustQtyForDiscount(product: Product, qty: number) {
   const baseQty = Math.max(1, Math.floor(qty || 1));
   if (!isOneFree(product)) {
     return baseQty;
@@ -78,12 +80,12 @@ export function addToCart(product: Product, qty = 1) {
   const index = items.findIndex(i => i.product.code === product.code);
 
   // For one-free, adding a single should add 2; generally enforce even increments and min 2
-  const increment = adjustQtyForPromo(product, qty);
+  const increment = adjustQtyForDiscount(product, qty);
 
   if (index >= 0) {
     const current = items[index];
     const nextQtyRaw = (current.qty || 0) + increment;
-    const nextQty = adjustQtyForPromo(product, nextQtyRaw);
+    const nextQty = adjustQtyForDiscount(product, nextQtyRaw);
     items[index] = { ...current, qty: nextQty };
   } else {
     items.push({ product, qty: increment });
@@ -96,7 +98,7 @@ export function updateQty(code: string, qty: number) {
   const items = getCart();
   const updated = items.map(i => {
     if (i.product.code !== code) return i;
-    const adjusted = adjustQtyForPromo(i.product, qty);
+    const adjusted = adjustQtyForDiscount(i.product, qty);
     return { ...i, qty: adjusted };
   });
   setCart(updated);

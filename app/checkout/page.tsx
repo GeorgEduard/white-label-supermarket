@@ -6,6 +6,7 @@ import CheckoutForm from '@/app/components/checkout/CheckoutForm';
 import { clearCart, getCart, getCartPrice } from '@/app/lib/cart';
 import useCartDiscounts from '@/app/hooks/useCartDiscounts';
 import DiscountItem from '@/app/components/discounts/DiscountItem';
+import Button from '@/app/components/ui/Button';
 
 export default function CheckoutPage() {
   const [items, setItems] = useState<CartItem[]>([]);
@@ -67,13 +68,14 @@ export default function CheckoutPage() {
         <section className="lg:col-span-2">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-xl font-medium mb-3">Your Cart</h2>
-            <button
+            <Button
               aria-label="Remove from cart"
-              className="ml-auto inline-flex items-center justify-center rounded-md border border-transparent px-2.5 py-1.5 text-sm text-red-600 hover:bg-red-50 cursor-pointer"
+              variant="danger"
+              size="sm"
               onClick={clearCart}
             >
               Clear cart
-            </button>
+            </Button>
           </div>
 
           {items.length === 0 ? (

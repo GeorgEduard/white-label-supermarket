@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import type { Product } from '@/app/types';
+import Button from '@/app/components/ui/Button';
 
 interface CartItem {
   product: Product;
@@ -147,13 +148,14 @@ export default function CheckoutForm({ items, total }: CheckoutFormProps) {
             </label>
           </fieldset>
 
-          <button
+          <Button
             type="submit"
+            variant="primary"
+            fullWidth
             disabled={items.length === 0 || isSubmitting}
-            className="w-full inline-flex items-center justify-center rounded-md bg-cyan-700 text-white px-4 py-2 text-sm shadow-sm hover:bg-cyan-800 disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {isSubmitting ? 'Submitting...' : 'Submit order'}
-          </button>
+          </Button>
 
           {submitted && (
             <p className="text-sm text-emerald-700">

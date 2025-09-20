@@ -2,6 +2,7 @@
 import React from 'react';
 import { Product } from '@/app/types';
 import { isOneFree, removeFromCart, updateQty } from '@/app/lib/cart';
+import Button from '@/app/components/ui/Button';
 
 interface CartItemProps {
   product: Product;
@@ -26,13 +27,15 @@ export default function CartDetails({ product, qty }: CartItemProps) {
         onChange={e => updateQty(product.code, Number(e.target.value) || 1)}
       />
       {/* Remove */}
-      <button
+      <Button
         aria-label="Remove from cart"
-        className="ml-auto inline-flex items-center justify-center rounded-md border border-transparent px-2.5 py-1.5 text-sm text-red-600 hover:bg-red-50"
+        variant="danger"
+        size="sm"
+        className="ml-auto"
         onClick={() => removeFromCart(product.code)}
       >
         <span aria-hidden>×</span>
-      </button>
+      </Button>
     </div>
   );
 }

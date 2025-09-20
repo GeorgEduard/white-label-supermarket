@@ -5,6 +5,7 @@ import DiscountLabel from '@/app/components/discounts/DiscountLabel';
 import CartDetails from '@/app/components/product/CartDetails';
 import { addToCart, getCartPrice } from '@/app/lib/cart';
 import { useState } from 'react';
+import Button from '@/app/components/ui/Button';
 
 interface ProductItemProps extends CartItem {
   isInCart?: boolean;
@@ -51,13 +52,14 @@ export default function ProductItem({
           <CartDetails product={p} qty={qty || 1} />
         ) : (
           <div className="mt-3">
-            <button
+            <Button
+              variant="primary"
+              size="sm"
               disabled={loading}
               onClick={addItemToCart}
-              className="cursor-pointer inline-flex items-center justify-center rounded-md bg-cyan-700 text-white px-3 py-1.5 text-sm shadow-sm hover:bg-cyan-800 focus:outline-none focus:ring-2 focus:ring-cyan-500/60 transition-colors duration-200"
             >
               Add to cart
-            </button>
+            </Button>
           </div>
         )}
       </div>

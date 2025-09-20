@@ -1,38 +1,14 @@
 'use client';
-import React, { useEffect, useMemo, useState } from 'react';
-import type { CartItem } from '@/app/types';
-import { getCart, getCartPrice } from '@/app/lib/cart';
+import React, { useMemo } from 'react';
+import { getCartPrice } from '@/app/lib/cart';
 import useCartDiscounts from '@/app/hooks/useCartDiscounts';
 import CartSection from '@/app/components/checkout/CartSection';
 import OrderSummary from '@/app/components/checkout/OrderSummary';
+import useCart from '@/app/hooks/useCart';
 
 export default function CheckoutPage() {
-  const [items, setItems] = useState<CartItem[]>([]);
+  const items = useCart();
   const { discounts, error, loading } = useCartDiscounts();
-
-  useEffect(() => {
-    const load = () => setItems(getCart());
-    // Load cart from sessionStorage on mount
-    load();
-
-    const handler = (e: Event) => {
-      try {
-        const cartEvent = e as CustomEvent<{ items?: CartItem[] }>;
-        const items = cartEvent.detail?.items;
-        if (Array.isArray(items)) {
-          setItems(items as CartItem[]);
-        } else {
-          load();
-        }
-      } catch {
-        load();
-      }
-    };
-
-    window.addEventListener('cart:updated', handler as EventListener);
-    return () =>
-      window.removeEventListener('cart:updated', handler as EventListener);
-  }, []);
 
   const subtotal = useMemo(
     () => items.reduce((sum, it) => sum + getCartPrice(it.product, it.qty), 0),

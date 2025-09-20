@@ -1,38 +1,14 @@
 'use client';
-import React, { useEffect, useState } from 'react';
-import { getCart } from '@/app/lib/cart';
+import React, { useMemo } from 'react';
+import useCart from '@/app/hooks/useCart';
 
 export default function CartCountBadge() {
-  const [count, setCount] = useState(0);
+  const items = useCart();
 
-  useEffect(() => {
-    // Initialize from sessionStorage
-    const load = () => {
-      const items = getCart();
-      const total = items.reduce((sum, it) => sum + (it.qty || 0), 0);
-      setCount(total);
-    };
-    load();
-
-    const handler = (e: Event) => {
-      try {
-        const cartEvent = e as CustomEvent<{ items?: { qty: number }[] }>;
-        const items = cartEvent.detail?.items;
-        if (Array.isArray(items)) {
-          const total = items.reduce((sum, item) => sum + (item.qty || 0), 0);
-          setCount(total);
-        } else {
-          load();
-        }
-      } catch {
-        load();
-      }
-    };
-
-    window.addEventListener('cart:updated', handler as EventListener);
-    return () =>
-      window.removeEventListener('cart:updated', handler as EventListener);
-  }, []);
+  const count = useMemo(
+    () => items.reduce((sum, it) => sum + (it.qty || 0), 0),
+    [items],
+  );
 
   if (count <= 0) {
     return null;

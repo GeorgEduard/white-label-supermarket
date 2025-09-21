@@ -105,7 +105,7 @@ function adjustQtyForDiscount(product: Product, qty: number) {
  * Clamps the requested quantity to the available stock for the product.
  */
 function clampToStock(product: Product, qty: number) {
-  const stock = product.stock ?? 0;
+  const stock = product.stock ?? Infinity; // Undefined stock means unlimited availability
   if (stock <= 0) {
     return 0;
   }
@@ -116,11 +116,11 @@ function clampToStock(product: Product, qty: number) {
   // One-free: allow odd ONLY at stock cap; otherwise enforce even quantities with min
   const min = stock < 2 ? 1 : 2;
   if (requested >= stock) {
-    return stock;
+    return stock as number; // when stock is finite, cap at stock
   }
   const desired = Math.max(min, requested);
-  const evenDesired = desired % 2 === 0 ? desired : desired - 1;
-  return Math.min(evenDesired, stock);
+  const evenDesired = desired % 2 === 0 ? desired : desired + 1; // round up to next even
+  return Math.min(evenDesired, stock as number);
 }
 
 /**
@@ -130,8 +130,8 @@ export function addToCart(product: Product, qty = 1) {
   const items = getCart();
   const index = items.findIndex(i => i.product.code === product.code);
 
-  // Prevent adding when there's no stock
-  if ((product.stock ?? 0) <= 0) {
+  // Prevent adding when there's no stock (undefined stock means unlimited)
+  if ((product.stock ?? Infinity) <= 0) {
     return items;
   }
 

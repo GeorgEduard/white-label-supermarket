@@ -98,8 +98,8 @@ For the `buy-one-get-one-free` discount logic I chose to automatically add a sec
 
 - I used `create-next-app` to generate the project.
 - I'm using Jetbrains WebStorm as my IDE. It has an AI Chat that can be used for answering questions and a built-in AI assistant called Junie that can be used for code completion and generation. It has access to all major AI tools, like ChatGPT, Claude, Gemini, and more.
-- I told the AI to generate the JSX content for the pages and to style it with Tailwind. It's way better than writing the same basic code by hand, and much faster.
-- As the project progressed, I gave it more instructions for different parts of the project. It's not a perfect tool, so I manually reviewed all the generated code and made adjustments or simplified the code where needed.
+- I told the AI to generate the JSX content for the pages and to style it with Tailwind. It's way better than writing the same basic code by hand, and much faster. It also generated the product SVGs.
+- As the project progressed, I gave it more instructions for different parts of the project. It's not a perfect tool, so I manually reviewed all the generated code and made adjustments, reworked the folder structure, or simplified the code where needed.
 - I also used it when I decided to majorly refactor the code. What I would've done in half an hour, it was done in 5 minutes.
 - Because my testing experience is very limited, I asked the AI to generate tests for the project. Besides the fact that all code should be tested, because when I first started to look into Jest and testing, AI wasn't a tool that I could use, I'm also using this opportunity to learn more about testing.
 - I believe that AI is definitely part of the future of software development. As long as you don't use it blindly to churn out code, without having an idea what that code does, it's a powerful tool that makes the development process much faster and more enjoyable.

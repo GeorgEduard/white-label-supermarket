@@ -24,10 +24,13 @@ const products: Product[] = [
     price: 0.83,
     discount: 'P1',
     image: '/products-asparagus.svg',
-    stock: 5,
+    stock: 100,
   },
 ];
 
+/**
+ * Get all products
+ */
 export function GET(_request: Request) {
   return Response.json(products);
 }

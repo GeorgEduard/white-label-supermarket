@@ -59,6 +59,8 @@ Since this is a Frontend-focused role, I decided to go with a minimal backend. I
 
 I decided to go with Next.js as a frontend framework because I believe it's the best choice for an e-commerce project since it's more SEO-friendly than a basic React SPA, has a great developer experience, and is easy to scale. Also, the App Router is now the default routing solution in Next.js, and I find it better than the `pages` structure.
 
+For state management, I went with React Context. I chose this approach because it's most suitable for a small project like this.
+
 Because there are only three products, I decided to go with a simple product list on the homepage. I didn't see a reason to build an individual product page, but it would be necessary if the project grew.
 
 For the cart system I went with the `sessionStorage` API. I chose this approach because it's simple, and enough for a basic shopping cart.`

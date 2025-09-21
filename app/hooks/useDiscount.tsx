@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { Discount } from '@/app/types';
 
+/**
+ * Custom hook to fetch a discount by ID
+ */
 export default function useDiscount(id?: string) {
   const [discount, setDiscount] = useState<Discount | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -19,7 +22,7 @@ export default function useDiscount(id?: string) {
       const res = await fetch(`/api/discounts/${encodeURIComponent(id)}`, {
         cache: 'no-store',
       });
-
+      // 404 is a valid response for a discount not found, and not an error
       if (res.status === 404) {
         setDiscount(null);
         setError('Discount not found');

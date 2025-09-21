@@ -1,37 +1,11 @@
 'use client';
-import React, { useMemo } from 'react';
-import { getCartPrice } from '@/app/lib/cart';
-import useCartDiscounts from '@/app/hooks/useCartDiscounts';
+import React from 'react';
 import CartSection from '@/app/components/checkout/CartSection';
 import OrderSummary from '@/app/components/checkout/OrderSummary';
 import useCart from '@/app/hooks/useCart';
 
 export default function CheckoutPage() {
   const items = useCart();
-  const { discounts, error, loading } = useCartDiscounts();
-
-  const subtotal = useMemo(
-    () => items.reduce((sum, it) => sum + getCartPrice(it.product, it.qty), 0),
-    [items],
-  );
-
-  const totalDiscount = useMemo(() => {
-    if (!discounts || !discounts.length) {
-      return 0;
-    }
-    return discounts.reduce((sum, d) => {
-      if (subtotal >= d.threshold) {
-        const value = d.type === 'fixed' ? d.value : (subtotal * d.value) / 100;
-        return sum + value;
-      }
-      return sum;
-    }, 0);
-  }, [discounts, subtotal]);
-
-  const total = useMemo(
-    () => subtotal - totalDiscount,
-    [subtotal, totalDiscount],
-  );
 
   return (
     <div className="mx-auto max-w-5xl py-4 sm:py-6">
@@ -39,14 +13,7 @@ export default function CheckoutPage() {
       <div className="rounded-lg bg-emerald-50/60 px-4 pb-8 pt-4 sm:px-6 sm:pb-12 sm:pt-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <CartSection items={items} />
-          <OrderSummary
-            items={items}
-            subtotal={subtotal}
-            total={total}
-            discounts={discounts}
-            loading={loading}
-            error={error}
-          />
+          <OrderSummary items={items} />
         </div>
       </div>
     </div>

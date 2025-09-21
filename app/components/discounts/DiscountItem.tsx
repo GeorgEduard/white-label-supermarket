@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { CartDiscount } from '@/app/types';
+
 export default function DiscountItem({
   discount,
   subtotal,

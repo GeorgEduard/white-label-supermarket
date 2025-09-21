@@ -1,14 +1,9 @@
-"use client";
+'use client';
 import React, { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import type { Product } from '@/app/types';
+import type { CartItem } from '@/app/types';
 import Button from '@/app/components/ui/Button';
-
-interface CartItem {
-  product: Product;
-  qty: number;
-}
 
 interface CheckoutFormProps {
   items: CartItem[];

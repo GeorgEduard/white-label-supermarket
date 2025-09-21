@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import Logo from '@/app/components/shared/Logo';
 import CartCountBadge from '@/app/components/CartCountBadge';
+
 export default function Menu() {
   return (
     <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">

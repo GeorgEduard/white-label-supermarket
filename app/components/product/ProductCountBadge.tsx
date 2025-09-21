@@ -6,11 +6,13 @@ export default function ProductCountBadge({ code }: { code: string }) {
   const items = useCart();
 
   const count = useMemo(() => {
-    const found = items.find(i => i.product.code === code);
-    return found?.qty || 0;
+    const item = items.find(i => i.product.code === code);
+    return item?.qty || 0;
   }, [items, code]);
 
-  if (count <= 0) return null;
+  if (count <= 0) {
+    return null;
+  }
 
   return (
     <span

@@ -15,18 +15,19 @@ interface ProductItemProps extends CartItem {
 
 export default function ProductItem({
   product: p,
-  isInCart,
   qty,
+  isInCart,
 }: ProductItemProps) {
   const [loading, setLoading] = useState(false);
   const items = useCart();
+
   const inCartQty = useMemo(() => {
     const found = items.find(i => i.product.code === p.code);
     return found?.qty || 0;
   }, [items, p.code]);
 
   const stock = p.stock ?? 0;
-  const reachedCap = stock > 0 && inCartQty >= stock;
+  const reachedCap = stock > 0 && inCartQty >= stock; // If reached stock cap, don't allow adding more
 
   const addItemToCart = () => {
     setLoading(true);

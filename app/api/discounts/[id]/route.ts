@@ -1,6 +1,9 @@
 import type { NextRequest } from 'next/server';
 import { discounts } from '@/app/api/discounts/discounts';
 
+/**
+ * Get a discount by ID
+ */
 export async function GET(
   _request: NextRequest,
   context: { params: Promise<{ id: string }> },

@@ -1,22 +1,29 @@
 import type { CartItem, Product } from '@/app/types';
 import { discounts } from '@/app/api/discounts/discounts';
 
-const KEY = 'cart';
+const SESSION_STORAGE_KEY = 'cart';
 
+/**
+ * Get the cart items from the session storage
+ */
 export function getCart(): CartItem[] {
   if (typeof window === 'undefined') {
     return [];
   }
   try {
-    const data = sessionStorage.getItem(KEY);
-    if (!data) return [];
+    const data = sessionStorage.getItem(SESSION_STORAGE_KEY);
+    if (!data) {
+      return [];
+    }
     const cart = JSON.parse(data);
     // Ensure the parsed value is an array
     if (Array.isArray(cart)) {
       return cart.map((i: CartItem) => {
         const qty = i?.qty ?? 1;
         const product = i?.product as Product;
-        if (!product) return i;
+        if (!product) {
+          return i;
+        }
         const adjustedQty = clampToStock(
           product,
           adjustQtyForDiscount(product, qty),
@@ -30,10 +37,15 @@ export function getCart(): CartItem[] {
   }
 }
 
+/**
+ * Set the cart items in the session storage
+ */
 export function setCart(items: CartItem[]) {
-  if (typeof window === 'undefined') return;
+  if (typeof window === 'undefined') {
+    return;
+  }
   try {
-    sessionStorage.setItem(KEY, JSON.stringify(items));
+    sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(items));
     // notify listeners in the same tab
     try {
       window.dispatchEvent(
@@ -47,6 +59,9 @@ export function setCart(items: CartItem[]) {
   }
 }
 
+/**
+ * Checks if the product has a `buy-one-get-one` discount
+ */
 export function isOneFree(product?: Product) {
   if (!product?.discount) {
     return false;
@@ -55,6 +70,9 @@ export function isOneFree(product?: Product) {
   return discount?.type === 'one-free';
 }
 
+/**
+ * Returns the number of units that can be paid for the given quantity.
+ */
 export function getPayableUnits(product: Product, qty: number) {
   const normalizedQty = Math.max(0, Math.floor(qty || 0));
   if (isOneFree(product)) {
@@ -64,20 +82,28 @@ export function getPayableUnits(product: Product, qty: number) {
   return normalizedQty;
 }
 
+/**
+ * Returns the total price for the given product and quantity.
+ */
 export function getCartPrice(product: Product, qty: number) {
   return product.price * getPayableUnits(product, qty);
 }
 
+/**
+ * Adjusts the requested quantity for a discount.
+ */
 function adjustQtyForDiscount(product: Product, qty: number) {
   const baseQty = Math.max(1, Math.floor(qty || 1));
   if (!isOneFree(product)) {
     return baseQty;
   }
   // For one-free, enforce minimum quantity but do not force even quantities
-  const atLeastMin = Math.max(2, baseQty);
-  return atLeastMin;
+  return Math.max(2, baseQty);
 }
 
+/**
+ * Clamps the requested quantity to the available stock for the product.
+ */
 function clampToStock(product: Product, qty: number) {
   const stock = product.stock ?? 0;
   if (stock <= 0) {
@@ -97,6 +123,9 @@ function clampToStock(product: Product, qty: number) {
   return Math.min(evenDesired, stock);
 }
 
+/**
+ * Adds a product to the cart.
+ */
 export function addToCart(product: Product, qty = 1) {
   const items = getCart();
   const index = items.findIndex(i => i.product.code === product.code);
@@ -127,10 +156,15 @@ export function addToCart(product: Product, qty = 1) {
   return items;
 }
 
+/**
+ * Updates the quantity of a product in the cart.
+ */
 export function updateQty(code: string, qty: number) {
   const items = getCart();
   const updated = items.map(i => {
-    if (i.product.code !== code) return i;
+    if (i.product.code !== code) {
+      return i;
+    }
     const adjusted = clampToStock(
       i.product,
       adjustQtyForDiscount(i.product, qty),
@@ -141,12 +175,18 @@ export function updateQty(code: string, qty: number) {
   return updated;
 }
 
+/**
+ * Removes a product from the cart.
+ */
 export function removeFromCart(code: string) {
   const items = getCart().filter(i => i.product.code !== code);
   setCart(items);
   return items;
 }
 
+/**
+ * Clears the cart.
+ */
 export function clearCart() {
   setCart([]);
 }

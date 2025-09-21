@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { Product } from '@/app/types';
 
+/**
+ * Custom hook to fetch products
+ */
 export default function useProducts() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);

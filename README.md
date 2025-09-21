@@ -63,18 +63,18 @@ For state management, I went with React Context. I chose this approach because i
 
 Because there are only three products, I decided to go with a simple product list on the homepage. I didn't see a reason to build an individual product page, but it would be necessary if the project grew.
 
-For the cart system I went with the `sessionStorage` API. I chose this approach because it's simple, and enough for a basic shopping cart.`
+For the cart system I went with the `sessionStorage` API. I chose this approach because it's simple, and enough for a basic shopping cart.
 
 For the checkout, again, being a simple project, there was no need to implement a `user` logic, with sign-up, sign-in, etc. A simple cart, with a basic checkout form, was enough.
 
-For the `buy-one-get-one-free` I chose to automatically add a second product to the cart when the user adds the first one. One other option (and most likely the better) would have been to display the extra products in the cart as free. However, I decided this one was less complex and easier to implement.
+For the `buy-one-get-one-free` discount logic I chose to automatically add a second product to the cart when the user adds the first one. One other option (and most likely the better) would have been to display the extra products in the cart as free. However, I decided this one was less complex and easier to implement.
 
 
 ### Future improvements
 
 - Improve the design, at least get a free e-commerce theme and implement it.
 - Use a library for icons.
-- Use toasts for various notifications.
+- Use toasts for various notifications (e.g. when adding an item to the cart).
 - Add a notification system.
 - Add a product rating system.
 - Add a product review system.
@@ -94,7 +94,7 @@ For the `buy-one-get-one-free` I chose to automatically add a second product to 
 - Add a user wishlist.
 - Add a payment gateway.
 
-### Dev tools AI usage
+### Dev tools & AI usage
 
 - I used `create-next-app` to generate the project.
 - I'm using Jetbrains WebStorm as my IDE. It has an AI Chat that can be used for answering questions and a built-in AI assistant called Junie that can be used for code completion and generation. It has access to all major AI tools, like ChatGPT, Claude, Gemini, and more.
